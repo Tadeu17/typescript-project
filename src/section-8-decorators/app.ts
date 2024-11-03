@@ -100,7 +100,7 @@ class Product {
 const p1 = new Product('Book', 19);
 const p2 = new Product('Book 2', 29);
 
-function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+function AutobindSec8(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const adjDescriptor: PropertyDescriptor = {
     configurable: true,
@@ -116,7 +116,7 @@ function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 class Printer {
   message = 'This works!';
 
-  @Autobind
+  @AutobindSec8
   showMessage() {
     console.log(this.message);
   }
@@ -136,24 +136,24 @@ interface ValidatorConfig {
   };
 }
 
-const registeredValidators: ValidatorConfig = {};
+const registeredValidatorsSec8: ValidatorConfig = {};
 
-function Required(target: any, propName: string) {
-  registeredValidators[target.constructor.name] = {
-    ...registeredValidators[target.constructor.name],
+function RequiredSec8(target: any, propName: string) {
+  registeredValidatorsSec8[target.constructor.name] = {
+    ...registeredValidatorsSec8[target.constructor.name],
     [propName]: ['required']
   };
 }
 
 function PositiveNumber(target: any, propName: string) {
-  registeredValidators[target.constructor.name] = {
-    ...registeredValidators[target.constructor.name],
+  registeredValidatorsSec8[target.constructor.name] = {
+    ...registeredValidatorsSec8[target.constructor.name],
     [propName]: ['positive']
   };
 }
 
-function validate(obj: any) {
-  const objValidatorConfig = registeredValidators[obj.constructor.name];
+function validateSec8(obj: any) {
+  const objValidatorConfig = registeredValidatorsSec8[obj.constructor.name];
   if (!objValidatorConfig) {
     return true;
   }
@@ -174,7 +174,7 @@ function validate(obj: any) {
 }
 
 class Course {
-  @Required
+  @RequiredSec8
   title: string;
   @PositiveNumber
   price: number;
@@ -196,7 +196,7 @@ courseForm.addEventListener('submit', event => {
 
   const createdCourse = new Course(title, price);
 
-  if (!validate(createdCourse)) {
+  if (!validateSec8(createdCourse)) {
     alert('Invalid input, please try again!');
     return;
   }
