@@ -51,9 +51,10 @@ export function MaxLength(limit: number) {
 }
 
 export class Validator {
-  static validate(context: any) {
+  static validate(context: Record<string, any>): boolean | string {
     const contextName = context.constructor.name;
     const contextValidators = registeredValidators[contextName];
+    if (!contextValidators) return true;
 
     for (const prop in contextValidators) {
       const rules = contextValidators[prop];
@@ -92,5 +93,6 @@ export class Validator {
         return `Property ${prop} should not exceed ${rules.max}.`;
       }
     }
+    return true;
   }
 }

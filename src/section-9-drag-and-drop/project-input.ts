@@ -7,12 +7,12 @@ export class ProjectInput {
   formElement: HTMLFormElement;
 
   @Required
-  title: string;
+  title: string = "";
   @Required
-  description: string;
+  description: string ="";
   @Required
   @Max(10)
-  people: number;
+  people: number = 0;
 
   constructor(
     templateElement: HTMLTemplateElement,
@@ -23,9 +23,6 @@ export class ProjectInput {
     const importNode = document.importNode(this.templateElement.content, true);
     this.formElement = importNode.firstElementChild! as HTMLFormElement;
     this.formElement.id = "user-input";
-
-    this.title = this.description = "";
-    this.people = 0;
 
     // insert in the app
     this.targetElement.insertAdjacentElement("afterbegin", this.formElement);
@@ -41,24 +38,25 @@ export class ProjectInput {
   private submitHandler(event: Event) {
     event.preventDefault();
 
-    const elInTitle = <HTMLInputElement>document.getElementById("title")!;
-    const elInDesc = <HTMLInputElement>document.getElementById("description")!;
-    const elInPeople = <HTMLInputElement>document.getElementById("people")!;
+    const elInTitle =
+      this.formElement.querySelector<HTMLInputElement>("#title")!;
+    const elInDesc =
+      this.formElement.querySelector<HTMLInputElement>("#description")!;
+    const elInPeople =
+      this.formElement.querySelector<HTMLInputElement>("#people")!;
 
     this.title = elInTitle.value;
     this.description = elInDesc.value;
     this.people = +elInPeople.value;
 
-    if (Validator.validate(this)) {
+    const validationResult = Validator.validate(this);
+    if (typeof validationResult === "boolean") {
       console.log(
         "%cThis is a green text",
         "color:yellow; background: black; font-size: 30px;"
       );
     } else {
-      console.log(
-        "%cThis is a RED text",
-        "background: red; font-size: 30px;"
-      );
+      console.log("%c" + validationResult, "background: red; font-size: 30px;");
     }
   }
 }
