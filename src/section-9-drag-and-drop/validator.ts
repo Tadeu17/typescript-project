@@ -9,7 +9,7 @@ export function Required(context: any, propName: string) {
   if (!registeredValidators[className]) registeredValidators[className] = {};
 
   registeredValidators[className][propName] = {
-    ...registeredValidators[propName],
+    ...registeredValidators[className][propName],
     required: true,
   };
 }
@@ -20,14 +20,9 @@ export function Max(limit: number) {
     if (!registeredValidators[className]) registeredValidators[className] = {};
 
     registeredValidators[className][propName] = {
-      ...registeredValidators[propName],
+      ...registeredValidators[className][propName],
       maxLength: limit,
     };
-    console.log(
-      "im inside",
-      JSON.parse(JSON.stringify(registeredValidators[context.constructor.name]))
-    );
-    console.log(registeredValidators[context.constructor.name]);
   };
 }
 
@@ -40,13 +35,7 @@ export class Validator {
     for (const prop in contextValidators) {
       const rules = contextValidators[prop];
       if (rules.required && !context[prop]) return false;
-      console.log(registeredValidators, context[prop], rules);
-      if (
-        rules.maxLength !== undefined &&
-        typeof context[prop] === "string" &&
-        context[prop].length > rules.maxLength
-      )
-        return false;
+      if (rules.maxLength && context[prop] > rules.maxLength) return false;
     }
     return isValid;
   }

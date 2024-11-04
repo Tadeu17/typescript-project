@@ -56,7 +56,7 @@ export class ProjectInput {
       );
     } else {
       console.log(
-        "%cThis is a green text",
+        "%cThis is a RED text",
         "background: red; font-size: 30px;"
       );
     }
