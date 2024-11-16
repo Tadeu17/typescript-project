@@ -1,37 +1,22 @@
-import { Validator, Required, Max } from "./validator.js";
-import { Autobind } from "./utils.js";
+import { Validator, Required, Max } from "./validator";
+import { Autobind } from "./utils";
 
-export class ProjectInput {
-  templateElement: HTMLTemplateElement;
-  targetElement: HTMLDivElement;
-  formElement: HTMLFormElement;
+import { projectState } from "./project-state";
+import { Component } from "./component";
 
+export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   @Required
   title: string = "";
   @Required
-  description: string ="";
+  description: string = "";
   @Required
   @Max(10)
   people: number = 0;
 
-  constructor(
-    templateElement: HTMLTemplateElement,
-    targetElement: HTMLDivElement
-  ) {
-    this.templateElement = templateElement;
-    this.targetElement = targetElement;
-    const importNode = document.importNode(this.templateElement.content, true);
-    this.formElement = importNode.firstElementChild! as HTMLFormElement;
-    this.formElement.id = "user-input";
+  constructor() {
+    super("project-input", "app", "afterbegin", "user-input")
 
-    // insert in the app
-    this.targetElement.insertAdjacentElement("afterbegin", this.formElement);
-
-    this.configure();
-  }
-
-  private configure() {
-    this.formElement.addEventListener("submit", this.submitHandler);
+    this.toBeAddedElement.addEventListener("submit", this.submitHandler);
   }
 
   @Autobind
@@ -39,11 +24,11 @@ export class ProjectInput {
     event.preventDefault();
 
     const elInTitle =
-      this.formElement.querySelector<HTMLInputElement>("#title")!;
+      this.toBeAddedElement.querySelector<HTMLInputElement>("#title")!;
     const elInDesc =
-      this.formElement.querySelector<HTMLInputElement>("#description")!;
+      this.toBeAddedElement.querySelector<HTMLInputElement>("#description")!;
     const elInPeople =
-      this.formElement.querySelector<HTMLInputElement>("#people")!;
+      this.toBeAddedElement.querySelector<HTMLInputElement>("#people")!;
 
     this.title = elInTitle.value;
     this.description = elInDesc.value;
@@ -51,6 +36,8 @@ export class ProjectInput {
 
     const validationResult = Validator.validate(this);
     if (typeof validationResult === "boolean") {
+      projectState.addProject(this.title, this.description, this.people);
+
       console.log(
         "%cThis is a green text",
         "color:yellow; background: black; font-size: 30px;"

@@ -1,4 +1,4 @@
-import { ValidatorTypes } from "./types.js";
+import { ValidatorTypes } from "./types";
 
 const registeredValidators: {
   [context: string]: { [property: string]: ValidatorTypes };
