@@ -42,8 +42,16 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
         "%cThis is a green text",
         "color:yellow; background: black; font-size: 30px;"
       );
+
+      this.clearInputs();
     } else {
       console.log("%c" + validationResult, "background: red; font-size: 30px;");
     }
+  }
+  
+  clearInputs() {
+    this.title = ''
+    this.description = ''
+    this.people = 0
   }
 }
